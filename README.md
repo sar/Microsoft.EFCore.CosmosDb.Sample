@@ -1,0 +1,1 @@
+Microsoft.EFCore.CosmosDb.Sample
