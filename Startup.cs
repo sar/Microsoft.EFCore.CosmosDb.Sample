@@ -4,6 +4,8 @@ namespace Microsoft.EFCore.CosmosDb.Sample
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EFCore.CosmosDb.Sample.Models;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
@@ -23,7 +25,7 @@ namespace Microsoft.EFCore.CosmosDb.Sample
             Configuration = builder.Build();
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -41,9 +43,16 @@ namespace Microsoft.EFCore.CosmosDb.Sample
                 .AddNewtonsoftJson()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
+            services.AddEntityFrameworkCosmos();
 
-            services.AddControllersWithViews();
-            services.AddRazorPages();
+//            IConfigurationSection cosmosSettings = Configuration.GetSection("CosmosDb");
+//            services.AddDbContext<ToDoItemsContext>(options =>
+//            {
+//                options.UseCosmos(
+//                    cosmosSettings["AccountEndpoint"],
+//                    cosmosSettings["AccountKeys"],
+//                    cosmosSettings["Database"]);
+//            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
