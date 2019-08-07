@@ -1,0 +1,20 @@
+{
+  "id": "ac7585f9-7e9e-4ad4-9f0c-141432939136",
+  "Name": "Remember to go go karting!",
+  "Description": "There's nothing more fun than going go karting!",
+  "Completed": false
+}
+
+{
+"id": "ac7585f9-7e9e-4ad4-9f0c-141432939136",
+"Name": "Order pizzas for the team!",
+"Description": "Fun fridays begins next week, remember to order pizzas.",
+"Completed": false
+}
+
+{
+"id": "ac7585f9-7e9e-4ad4-9f0c-141432939136",
+"Name": "Get Windows Update 2019-07",
+"Description": "Schedule windows update on all target machines overnight.",
+"Completed": true
+}
