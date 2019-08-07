@@ -1,11 +1,24 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
-
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+<!--    <CodeAnalysisRuleSet>codeanalysis.ruleset</CodeAnalysisRuleSet>-->
   </PropertyGroup>
-
-
-  <ItemGroup>
+  
+  <ItemGroup Label="Microsoft.AspNetCore.*">
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0-preview9.19409.9" />
   </ItemGroup>
-
+  
+  <ItemGroup Label="Microsoft.EntityFrameworkCore.*">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.0.0-preview9.19410.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Cosmos" Version="3.0.0-preview9.19410.1" />
+  </ItemGroup>
+  
+  <ItemGroup Label="Microsoft.Azure.*">
+    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Azure.Cosmos.Direct" Version="3.1.4" />
+  </ItemGroup>
+  
+  <ItemGroup Label="Helpers.All">
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" />
+  </ItemGroup>
 </Project>

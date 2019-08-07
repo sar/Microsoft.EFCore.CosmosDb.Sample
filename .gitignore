@@ -2,3 +2,13 @@
 obj/
 
 wwwroot/lib/
+
+\.idea/
+
+bin/
+
+Kb/
+
+\.vs/
+
+Folder\.DotSettings\.user
