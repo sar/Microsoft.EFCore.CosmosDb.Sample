@@ -44,6 +44,7 @@ namespace Microsoft.EFCore.CosmosDb.Sample
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddEntityFrameworkCosmos();
+            services.AddDbContext<ToDoItemsContext>();
 
 //            IConfigurationSection cosmosSettings = Configuration.GetSection("CosmosDb");
 //            services.AddDbContext<ToDoItemsContext>(options =>
