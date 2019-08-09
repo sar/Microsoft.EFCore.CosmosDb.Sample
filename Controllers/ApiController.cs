@@ -1,13 +1,15 @@
-﻿namespace Microsoft.EFCore.CosmosDb.Sample.Controllers
+namespace Microsoft.EFCore.CosmosDb.Sample.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
+    using System.Text.Json;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EFCore.CosmosDb.Sample.Models;
     using Microsoft.EntityFrameworkCore;
-    using Newtonsoft.Json;
+    using Microsoft.EntityFrameworkCore.ChangeTracking;
     using Microsoft.Extensions.Configuration;
 
     [AspNetCore.Mvc.ApiController]
@@ -23,6 +25,17 @@
         {
             _context = context;
             _configuration = configuration;
+        }
+
+        private static string DefaultSerializer(object any)
+        {
+            return System.Text.Json.JsonSerializer.Serialize(any, new JsonSerializerOptions()
+            {
+                WriteIndented = true,
+                IgnoreNullValues = true,
+                DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+                //Encoder = JavaScriptEncoder.Default,
+            });
         }
 
         [HttpGet]
@@ -58,10 +71,5 @@
             ErrorViewModel err = new ErrorViewModel { RequestId = Activity.Current?.Id ?? null };
             return new List<string> { err.RequestId, err.ShowRequestId.ToString() };
         }
-
-        private static string DefaultSerializer(object any)
-        {
-            return JsonConvert.SerializeObject(any, Formatting.Indented);
-        }
     }
-}
+}
