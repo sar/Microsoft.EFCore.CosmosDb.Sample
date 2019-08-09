@@ -18,13 +18,18 @@ namespace Microsoft.EFCore.CosmosDb.Sample.Controllers
     public class ApiController : ApiControllerAttribute
     {
         private readonly ToDoItemsContext _context;
+        private readonly DbContextOptions<ToDoItemsContext> _options;
         private readonly IConfiguration _configuration;
         private static bool _instantiated = false;
 
-        public ApiController(ToDoItemsContext context, IConfiguration configuration)
+        public ApiController(
+            ToDoItemsContext context,
+            IConfiguration configuration,
+            DbContextOptions<ToDoItemsContext> options)
         {
             _context = context;
             _configuration = configuration;
+            _options = options;
         }
 
         private static string DefaultSerializer(object any)
@@ -47,20 +52,19 @@ namespace Microsoft.EFCore.CosmosDb.Sample.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        public async Task<string> GetAsync()
+        [ProducesResponseType(typeof(List<ToDoItem>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status204NoContent)]
+        public async Task<string> GetAllAsync()
         {
-            List<ToDoItem> getOpenItems;
-
-            var dbContextOpts = new DbContextOptions<ToDoItemsContext>();
-            await using (ToDoItemsContext context = new ToDoItemsContext(dbContextOpts, _configuration))
+            await using (ToDoItemsContext context = new ToDoItemsContext(_options, _configuration))
             {
                 await context.Database.EnsureCreatedAsync();
-                getOpenItems = await context.ToDoItems
-                    .Where(w => w.Completed)
+                List<ToDoItem> getOpenItems = await context.ToDoItems
+                    .Where(w => !w.Completed)
                     .ToListAsync();
-            }
 
-            return DefaultSerializer(getOpenItems);
+                return DefaultSerializer(getOpenItems) ?? NoContentResult;
+            }
         }
 
         [HttpGet]
