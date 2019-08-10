@@ -120,6 +120,34 @@ namespace Microsoft.EFCore.CosmosDb.Sample.Controllers
             return null;
         }
 
+        [HttpPost]
+        [Route("[action]")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(CosmosException), StatusCodes.Status424FailedDependency)]
+        public async Task<string> PostAsync([FromBody] ToDoItem toDoItem)
+        {
+            try
+            {
+                if (toDoItem == null)
+                {
+                    return Error();
+                }
+
+                await using (ToDoItemsContext context = new ToDoItemsContext(_options, _configuration))
+                {
+                    await context.ToDoItems.AddAsync(toDoItem);
+                    await context.SaveChangesAsync();
+                    ToDoItem insertedItem = await context.ToDoItems.LastOrDefaultAsync();
+                    return $"Created item in database with GUID: {insertedItem.Id} from serialized body input.";
+                }
+            }
+            catch (CosmosException ce)
+            {
+                Console.WriteLine(ce);
+                return $"Caught cosmos exception while performing operation: {ce}";
+            }
+        }
+
         [HttpGet]
         [Route("[action]")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
