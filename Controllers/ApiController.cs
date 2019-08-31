@@ -22,6 +22,9 @@ namespace Microsoft.EFCore.CosmosDb.Sample.Controllers
         private readonly IConfiguration _configuration;
         private static bool _instantiated = false;
 
+        private string NoContentResult { get; } =
+            $"No content found in database for defined query {typeof(List<ToDoItem>)}";
+
         public ApiController(
             ToDoItemsContext context,
             IConfiguration configuration,
@@ -124,6 +127,7 @@ namespace Microsoft.EFCore.CosmosDb.Sample.Controllers
         [Route("[action]")]
         [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(CosmosException), StatusCodes.Status424FailedDependency)]
+        [ProducesErrorResponseType(typeof(CosmosException))]
         public async Task<string> PostAsync([FromBody] ToDoItem toDoItem)
         {
             try
@@ -151,10 +155,12 @@ namespace Microsoft.EFCore.CosmosDb.Sample.Controllers
         [HttpGet]
         [Route("[action]")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public List<string> Error()
+        private string Error()
         {
             ErrorViewModel err = new ErrorViewModel { RequestId = Activity.Current?.Id ?? null };
-            return new List<string> { err.RequestId, err.ShowRequestId.ToString() };
+            return DefaultSerializer(new List<string> { err.RequestId, err.ShowRequestId.ToString() });
         }
+    }
+
     }
 }
